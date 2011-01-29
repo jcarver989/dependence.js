@@ -2,7 +2,7 @@ class FileWatcher
   def initialize(glob_str, &block)
     @dir = glob_str 
     recreate_timetable
-    poll(block)
+    poll(&block)
   end
 
   private

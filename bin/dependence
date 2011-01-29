@@ -28,17 +28,17 @@ options[:input] = ARGV[0]
 output_file = options[:output]
 compiler = JsCompiler.new(options[:input])
 
-def recompile
+def recompile(compiler, output_file)
   File.delete(output_file) if File.exists?(output_file)
   compiler.compile(output_file)
 end
 
-recompile
+recompile compiler, output_file
 
 if options[:watch]
-  puts "Watching #{options[:input]} for changes your js files will be compiled automatically"
-  FileWatcher.new do
-    recompile
+  puts "Watching #{options[:input]} for changes. Your javascript files will be compiled automatically"
+  FileWatcher.new "**/*.js" do
+    recompile compiler, output_file
   end 
 end
 
