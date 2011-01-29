@@ -25,22 +25,21 @@ elsif !File.directory? ARGV[0]
 end
 
 options[:input] = ARGV[0]
-compiled_file = options[:output]
-File.delete(compiled_file) if File.exists?(compiled_file)
-
+output_file = options[:output]
 compiler = JsCompiler.new(options[:input])
-compiler.compile(compiled_file)
+
+def recompile
+  File.delete(output_file) if File.exists?(output_file)
+  compiler.compile(output_file)
+end
+
+recompile
 
 if options[:watch]
   puts "Watching #{options[:input]} for changes your js files will be compiled automatically"
-  notifier = INotify::Notifier.new
-  notifier.watch(options[:input], :modify, :create, :delete) do |event|
-    if event.name =~ /.js$/
-      File.delete(compiled_file) if File.exists?(compiled_file)
-      compiler.compile(compiled_file)
-    end
+  FileWatcher.new do
+    recompile
   end 
-  notifier.run
 end
 
 
