@@ -1,6 +1,5 @@
 #!/usr/bin/env ruby
 require 'optparse'
-require 'rb-inotify'
 require  File.join(File.dirname(__FILE__), "..", "lib/dependence.rb")
 
 options = {:output => "compiled.js"}
