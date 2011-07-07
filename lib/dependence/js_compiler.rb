@@ -35,7 +35,8 @@ class JsCompiler
   end
 
   def cmd_prefix
-    "java -jar compiler/compiler.jar" 
+    path = File.join(File.dirname(__FILE__), "../", "../", "compiler", "compiler.jar")
+    "java -jar #{path}" 
     # --create_source_map js_map
   end
 end
