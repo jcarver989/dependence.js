@@ -2,36 +2,24 @@ require File.join(File.dirname(__FILE__),'dependency_resolver')
 require File.join(File.dirname(__FILE__),'colors')
 
 class JsCompiler
-  def initialize(source_path) 
-    @source_path = source_path
+  def initialize(source_file, output_file = nil) 
+    output_file = source_file.gsub(".js", ".min.js") unless output_file
+    @source = source_file
+    @output = output_file
   end
 
-  def compile(output_file)
+  def compile
     @cmd = cmd_prefix
-    @source_files = get_source_files 
-    dep_resolver = DependencyResolver.new(@source_files,@source_path)
-    file_order = dep_resolver.sorted_files
-    puts "#{Colors.green('Source Files')}: #{file_order.to_s}"
-    puts ""
-    puts Colors.red "Compiler Output:"
-    file_order.each {|source_file| add_file source_file }
-    execute_compile(output_file)
+    puts Colors.green("Compressing: #{@source}")
+    puts Colors.red "Compressor Output:"
+    execute_compile
   end
 
   private
-  def	add_file(filename)
-    @cmd += " --js=#{filename}"
-  end
-
-  def get_source_files
-    Dir.glob File.join(@source_path,"/**/*.js")
-  end
-
-  def execute_compile(output_file)
-    @cmd += " --js_output_file #{output_file}"
+  def execute_compile
+    @cmd += " --js #{@source} --js_output_file #{@output}"
     `#{@cmd}`
-    puts Colors.green("compilted #{@source_files.size} javascript files into #{output_file}")
-    puts "------------------------------------------------------"
+    puts Colors.green("compressed #{@source} to #{@output}")
   end
 
   def cmd_prefix

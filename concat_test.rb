@@ -30,21 +30,16 @@ class DependenceCompiler
   end
 
   def run_compile 
-    begin
-      @concatenator.concat do |module_name, module_content|
-        stdout_compile_msg(module_name)
-        output = File.join(@config[:output], "#{module_name}.js")
-        compiled = compile_code(module_content)
-        compiled = ModuleInjector.modularize(module_name, compiled) unless @config[:bare]
-        File.open(output, 'w') { |f| f.syswrite compiled }
+    @concatenator.concat do |module_name, module_content|
+      stdout_compile_msg(module_name)
+      output = File.join(@config[:output], "#{module_name}.js")
+      compiled = compile_code(module_content)
+      compiled = ModuleInjector.modularize(module_name, compiled) unless @config[:bare]
+      File.open(output, 'w') { |f| f.syswrite compiled }
 
-        stdout_compile_complete_msg(module_name, output)
-        compress_code(output) if @config[:compress]
-      end
+      stdout_compile_complete_msg(module_name, output)
 
-    rescue
-      puts Colors.red("exiting")
-      exit 1
+      compress_code(output) if @config[:compress]
     end
   end
 
@@ -52,7 +47,7 @@ class DependenceCompiler
   def stdout_compile_msg(module_name)
     puts ""
     puts "================================"
-    puts Colors.green("Detected Module: #{module_name}")
+    puts Colors.green("Compiling Module: #{module_name}")
     puts "================================"
   end
 

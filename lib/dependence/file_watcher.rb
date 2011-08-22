@@ -1,6 +1,10 @@
 class FileWatcher
-  def initialize(glob_str, &block)
-    @dir = glob_str 
+  @@defaults = {
+    :load_path => ".",
+    :glob_str  => "**/*.js"
+  }
+  def initialize(opts, &block)
+    @options = @@defaults.merge(opts)
     recreate_timetable
     poll(&block)
   end
@@ -32,7 +36,7 @@ class FileWatcher
   end
 
   def get_files
-    Dir.glob @dir
+    Dir.glob File.join(@options[:load_path], @options[:glob_str]) 
   end
 
   def recreate_timetable
