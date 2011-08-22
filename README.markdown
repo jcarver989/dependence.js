@@ -72,12 +72,14 @@ component_2.js
     exports.Component2 = Component2 
 
 Notice the following:
+
 - Our project is comprised of two modules: share_widget and popup_widget. 
 - component_1.js and component_2.js each have module level dependencies on events.js, dom_bindings.js and animations.js while animations.js depends on events.js. These are declared with "//@import" comments - more on this below
 - By default you must export any objects that you'd like to expose outside of the module
 
 
 Now when we run Dependence.js:
+
     dependence project_dir/src/ -o compiled/
 
 We will get two output files: share_widget.js and popup_widget.js. By default Dependence.js will wrap each output file in its own namespace, attached to the global object (window or global) and sharing the same name as the module's directory (via a closure). So using the example above when we want to call init() on Component1 we would call it like so:
@@ -90,9 +92,11 @@ File Dependencies
 ---------------------
 
 File dependencies are declared like so in javascript
+
     // @import foo.js
 
 For CoffeeScript
+
     # @import foo.js
 
 File paths are relative to the widget's directory
