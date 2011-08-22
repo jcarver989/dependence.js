@@ -44,13 +44,14 @@ Suppose we have some javascript project with the following directory structure:
 
 animations.js
 
-    `//@import events.js`
+    //@import events.js
 
     function Animation() { ... }
 
     exports.Animation = Animation
 
 component_1.js
+
     //@import dom_bindings.js
     //@import events.js 
     //@import animations.js 
@@ -60,6 +61,7 @@ component_1.js
     exports.Component1 = Component1 
 
 component_2.js
+
     //@import dom_bindings.js
     //@import events.js 
     //@import animations.js
