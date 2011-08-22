@@ -43,7 +43,7 @@ Suppose we have some javascript project with the following directory structure:
 ### Setting up the Dependencies 
 
 animations.js
-    //@import events.js
+    `//@import events.js`
 
     function Animation() { ... }
 
