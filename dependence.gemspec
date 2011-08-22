@@ -12,4 +12,5 @@ Gem::Specification.new do |spec|
   spec.files += Dir.glob "compiler/*"
   spec.files += Dir.glob "lib/**/*"
   spec.add_dependency("rgl")
+  spec.add_dependency("coffee-script")
 end
