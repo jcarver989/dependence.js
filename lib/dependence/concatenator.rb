@@ -1,5 +1,5 @@
 require 'fileutils'
-require File.join(File.dirname(__FILE__), 'colors')
+require "dependence/colors"
 
 module Dependence
   # Take a load path + file glob and concat them into 1 file per directory
@@ -26,13 +26,13 @@ module Dependence
       no_files_error if files.empty?
 
       files_list = get_files_in_dependency_order(dir, files)
-      
+
       block.call module_name, concat_files(files_list)
     end
 
-    def no_files_error 
+    def no_files_error
       puts Colors.red("No files of the specified type #{File.extname(@options[:source_type])} were found in #{@options[:load_path]}")
-      throw :no_files_to_concatenate 
+      throw :no_files_to_concatenate
     end
 
     def get_files_in_dependency_order(dir, files)
