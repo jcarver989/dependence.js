@@ -1,27 +1,25 @@
 #!/usr/bin/env ruby
-
-$: << "."
 require 'rubygems'
+require 'fileutils'
 require 'coffee-script'
-require 'lib/dependence'
+require 'dependence'
 require 'optparse'
-require  File.join(File.dirname(__FILE__), "..", "lib/dependence.rb")
 
-class DependenceCompiler 
-  def initialize(config) 
+class DependenceCompiler
+  def initialize(config)
     @config = config
     @src_glob = "**/*.#{@config[:type]}"
     @concatenator = Dependence::Concatenator.new(
-      :load_path => @config[:src_dir], 
+      :load_path => @config[:src_dir],
       :source_type => @src_glob
     )
   end
 
   def compile
-    @config[:watch] ? compile_with_watcher : run_compile 
+    @config[:watch] ? compile_with_watcher : run_compile
   end
 
-  private 
+  private
 
   def compile_with_watcher
     FileWatcher.new(:load_path => @config[:src_dir],  :glob_str => @src_glob) do
@@ -29,10 +27,11 @@ class DependenceCompiler
     end
   end
 
-  def run_compile 
+  def run_compile
     begin
       @concatenator.concat do |module_name, module_content|
         stdout_compile_msg(module_name)
+        FileUtils::mkdir_p @config[:output]
         output = File.join(@config[:output], "#{module_name}.js")
         compiled = compile_code(module_content)
         compiled = ModuleInjector.modularize(module_name, compiled) unless @config[:bare]
@@ -42,9 +41,9 @@ class DependenceCompiler
         compress_code(output) if @config[:compress]
       end
 
-    rescue
-      puts Colors.red("exiting")
-      exit 1
+    rescue => e
+      puts Colors.red("Error during processing, exiting.")
+      raise e
     end
   end
 
@@ -63,7 +62,7 @@ class DependenceCompiler
   def compile_code(raw_code)
     return CoffeeScript.compile(raw_code, :bare => true) if @config[:type] == "coffee"
     raw_code
-  end 
+  end
 
   def compress_code(source_file)
     JsCompiler.new(source_file).compile
@@ -117,5 +116,4 @@ options[:src_dir] = ARGV[0]
 
 compiler = DependenceCompiler.new options
 compiler.compile
-
 

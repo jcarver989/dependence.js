@@ -1,8 +1,8 @@
-require File.join(File.dirname(__FILE__),'dependency_resolver')
-require File.join(File.dirname(__FILE__),'colors')
+require "dependence/dependency_resolver"
+require "dependence/colors"
 
 class JsCompiler
-  def initialize(source_file, output_file = nil) 
+  def initialize(source_file, output_file = nil)
     output_file = source_file.gsub(".js", ".min.js") unless output_file
     @source = source_file
     @output = output_file
@@ -24,7 +24,7 @@ class JsCompiler
 
   def cmd_prefix
     path = File.join(File.dirname(__FILE__), "../", "../", "compiler", "compiler.jar")
-    "java -jar #{path}" 
+    "java -jar #{path}"
     # --create_source_map js_map
   end
 end
