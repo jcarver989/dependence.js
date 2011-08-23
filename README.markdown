@@ -82,10 +82,10 @@ Now when we run Dependence.js:
 
     dependence project_dir/src/ -o compiled/
 
-We will get two output files: share_widget.js and popup_widget.js. By default Dependence.js will wrap each output file in its own namespace, attached to the global object (window or global) and sharing the same name as the module's directory (via a closure). So using the example above when we want to call init() on Component1 we would call it like so:
+We will get two output files: share_widget.js and popup_widget.js. By default Dependence.js will wrap each output file in its own namespace (via a closure), with an object attached to the global object (window or global). This object is the capitalized name as the module's directory. So using the example above when we want to call init() on Component1 we would call it like so:
 
     // global namespace
-    share_widget.Component1.init()
+    Share_widget.Component1.init()
 
 
 File Dependencies
