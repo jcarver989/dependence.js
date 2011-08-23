@@ -16,37 +16,41 @@ class DependenceCompiler
   end
 
   def compile
-    @config[:watch] ? compile_with_watcher : run_compile
-  end
-
-  private
-
-  def compile_with_watcher
-    FileWatcher.new(:load_path => @config[:src_dir],  :glob_str => @src_glob) do
-      run_compile
-    end
-  end
-
-  def run_compile
     begin
-      @concatenator.concat do |module_name, module_content|
-        stdout_compile_msg(module_name)
-        FileUtils::mkdir_p @config[:output]
-        output = File.join(@config[:output], "#{module_name}.js")
-        compiled = compile_code(module_content)
-        compiled = ModuleInjector.modularize(module_name, compiled) unless @config[:bare]
-        File.open(output, 'w') { |f| f.syswrite compiled }
-
-        stdout_compile_complete_msg(module_name, output)
-        compress_code(output) if @config[:compress]
-      end
-
+      @config[:watch] ? compile_with_watcher : run_compile
     rescue => e
       puts Colors.red("Error during processing, exiting.")
       raise e
     end
   end
 
+  private
+
+  def compile_with_watcher
+    FileWatcher.new(:load_path => @config[:src_dir],  :glob_str => @src_glob) do
+      print "File change detected. Recompiling... "
+      begin
+        run_compile
+        puts "done."
+      rescue => e
+        puts Colors.red("Error: " + e.to_s)
+      end
+    end
+  end
+
+  def run_compile
+    @concatenator.concat do |module_name, module_content|
+      stdout_compile_msg(module_name)
+      FileUtils::mkdir_p @config[:output]
+      output = File.join(@config[:output], "#{module_name}.js")
+      compiled = compile_code(module_content)
+      compiled = ModuleInjector.modularize(module_name, compiled) unless @config[:bare]
+      File.open(output, 'w') { |f| f.syswrite compiled }
+
+      stdout_compile_complete_msg(module_name, output)
+      compress_code(output) if @config[:compress]
+    end
+  end
 
   def stdout_compile_msg(module_name)
     puts ""
@@ -116,4 +120,3 @@ options[:src_dir] = ARGV[0]
 
 compiler = DependenceCompiler.new options
 compiler.compile
-
