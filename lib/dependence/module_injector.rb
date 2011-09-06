@@ -3,7 +3,7 @@ module ModuleInjector
   extend self
 
   @@module_code = <<MODULE_FUNC
-var global = (global != undefined)? global : window
+var global =  window
 
 if (global.module == undefined) {
   global.module = function(name, body) {

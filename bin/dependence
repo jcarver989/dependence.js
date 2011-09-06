@@ -53,10 +53,7 @@ class DependenceCompiler
   end
 
   def stdout_compile_msg(module_name)
-    puts ""
-    puts "================================"
     puts Colors.green("Detected Module: #{module_name}")
-    puts "================================"
   end
 
   def stdout_compile_complete_msg(module_name, output)
