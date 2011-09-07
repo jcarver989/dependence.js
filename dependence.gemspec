@@ -1,6 +1,6 @@
 Gem::Specification.new do |spec|
   spec.name ="dependence"
-  spec.version = "0.0.9"
+  spec.version = "0.0.91"
   spec.summary = "An easy way to handle your client side javascript dependencies"
   spec.authors = ["Joshua Carver"]
   spec.email = "jcarver989@gmail.com"
@@ -14,4 +14,5 @@ Gem::Specification.new do |spec|
   spec.add_dependency("rgl")
   spec.add_dependency("rb-inotify")
   spec.add_dependency("coffee-script")
+  spec.add_dependency("therubyracer")
 end
