@@ -6,7 +6,7 @@ module Dependence
   class Concatenator
     @@defaults = {
       :load_path    => ".",
-      :source_type  => "**/*.js"
+      :source_type  => "**/*{#{Compiler.supported_extensions.join(',')}}"
     }
 
     def initialize(opts = {})
@@ -42,8 +42,16 @@ module Dependence
 
     def concat_files(file_list)
       content = ""
-      file_list.each { |f| content << File.read(f); content << "\n" }
+      file_list.each do |f| 
+        content << compile_file(f)
+        content << "\n"
+      end
       content
+    end
+
+    def compile_file(file)
+      compiler = Compiler.get_compiler_for(File.extname(file))
+      compiler.new.compile(File.read(file))
     end
 
     # Top level dirs only

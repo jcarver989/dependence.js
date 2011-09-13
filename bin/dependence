@@ -8,10 +8,9 @@ require 'optparse'
 class DependenceCompiler
   def initialize(config)
     @config = config
-    @src_glob = "**/*.#{@config[:type]}"
+    @src_glob = "**/*"
     @concatenator = Dependence::Concatenator.new(
-      :load_path => @config[:src_dir],
-      :source_type => @src_glob
+      :load_path => @config[:src_dir]
     )
   end
 
@@ -42,9 +41,11 @@ class DependenceCompiler
     @concatenator.concat do |module_name, module_content|
       stdout_compile_msg(module_name)
       FileUtils::mkdir_p @config[:output]
+
+      compiled = module_content
+      compiled = ModuleInjector.modularize(module_name, module_content) unless @config[:bare]
+
       output = File.join(@config[:output], "#{module_name}.js")
-      compiled = compile_code(module_content)
-      compiled = ModuleInjector.modularize(module_name, compiled) unless @config[:bare]
       File.open(output, 'w') { |f| f.syswrite compiled }
 
       stdout_compile_complete_msg(module_name, output)
@@ -60,11 +61,6 @@ class DependenceCompiler
     puts Colors.green("Compiled #{module_name} to #{output}")
   end
 
-  def compile_code(raw_code)
-    return CoffeeScript.compile(raw_code, :bare => true) if @config[:type] == "coffee"
-    raw_code
-  end
-
   def compress_code(source_file)
     JsCompiler.new(source_file).compile
   end
@@ -73,7 +69,6 @@ end
 
 options = {
   :output   => ".",
-  :type     => "js",
   :watch    => false,
   :bare     => false,
   :compress => false
@@ -84,10 +79,6 @@ OptionParser.new do |opts|
 
   opts.on("-o", "--output DIR", "Output directory, defaults to '.'") do |dir|
     options[:output] = dir
-  end
-
-  opts.on("-t", "--type TYPE", "Source file extension [js, coffee]") do |type|
-    options[:type] = type
   end
 
   opts.on("-w", "--watch", "Watch src_dir for changes and recompile") do |bool|

@@ -104,8 +104,7 @@ File paths are relative to the widget's directory
 
 CoffeeScript
 ---------------------
-If you'd like to use dependence with a coffeescript project just use the "-t coffee" flag (see below)
-
+Dependence will automatically compile CoffeeScript (.cs or .coffee) files and Javascript (.js) files - so you can mix and match imported file types easily.
 
 Compression/Minification
 ---------------------
@@ -121,7 +120,6 @@ You may use the following options:
     dependence src_dir [options]
 
     -o, --output DIR             Output directory, defaults to '.' 
-    -t, --type TYPE              Source file extension [js, coffee]
     -w, --watch                  Watch src_dir for changes and recompile when something changes
     -b, --bare                   Do not wrap modules in closures with exports var
     -c, --compress               Compress output with Googles Closure compiler
