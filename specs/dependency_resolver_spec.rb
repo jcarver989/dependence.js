@@ -1,7 +1,8 @@
 require 'dependence/dependency_resolver'
-include Dependence
 require 'tmpdir'
 require  File.join(File.dirname(__FILE__), 'spec_helper')
+
+include Dependence
 
 describe DependencyResolver do
   describe "#sorted_files" do 
