@@ -24,7 +24,7 @@ module Dependence
         compile(extension, file_contents)
       end
 
-      output = ModuleInjector.modularize(@name, output) if @config[:bare] == true
+      output = ModuleInjector.modularize(@name, output) unless @config[:bare] == true
       output
     end
 
