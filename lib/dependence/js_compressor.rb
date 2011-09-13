@@ -1,14 +1,13 @@
-require "dependence/dependency_resolver"
 require "dependence/colors"
 
-class JsCompiler
+class JsCompressor
   def initialize(source_file, output_file = nil)
     output_file = source_file.gsub(".js", ".min.js") unless output_file
     @source = source_file
     @output = output_file
   end
 
-  def compile
+  def compress
     @cmd = cmd_prefix
     puts Colors.green("Compressing: #{@source}")
     puts Colors.red "Compressor Output:"

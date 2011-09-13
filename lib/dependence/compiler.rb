@@ -39,8 +39,7 @@ module Dependence
       CoffeeScript.compile(source_string, options)
     end
   end
-
-  class JavaScriptCompiler < Compiler
+class JavaScriptCompiler < Compiler
     @@extensions = [:js]
 
     def self.extensions

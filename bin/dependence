@@ -8,10 +8,10 @@ require 'optparse'
 class DependenceCompiler
   def initialize(config)
     @config = config
-    @src_glob = "**/*"
-    @concatenator = Dependence::Concatenator.new(
-      :load_path => @config[:src_dir]
-    )
+    @load_path = config[:src_dir]
+
+    ext_list = Dependence::Compiler.supported_extensions()
+    @source_type = "**/*{#{ext_list.join(',')}}"
   end
 
   def compile
@@ -26,7 +26,7 @@ class DependenceCompiler
   private
 
   def compile_with_watcher
-    FileWatcher.new(:load_path => @config[:src_dir],  :glob_str => @src_glob) do
+    FileWatcher.new(:load_path => @load_path,  :glob_str => @source_type) do
       print "File change detected. Recompiling... "
       begin
         run_compile
@@ -38,31 +38,26 @@ class DependenceCompiler
   end
 
   def run_compile
-    @concatenator.concat do |module_name, module_content|
-      stdout_compile_msg(module_name)
-      FileUtils::mkdir_p @config[:output]
+    create_output_directory()
 
-      compiled = module_content
-      compiled = ModuleInjector.modularize(module_name, module_content) unless @config[:bare]
+    module_dirs = Dir.glob("#{@load_path}/*/**/").map {|dir| File.expand_path(dir) }
+    module_dirs.delete(File.expand_path(@config[:output]))
 
-      output = File.join(@config[:output], "#{module_name}.js")
-      File.open(output, 'w') { |f| f.syswrite compiled }
-
-      stdout_compile_complete_msg(module_name, output)
-      compress_code(output) if @config[:compress]
+    module_dirs.each do |module_dir|
+      Dependence::JsModule.new(:source_dir   => module_dir, 
+                               :output_dir   => @config[:output],
+                               :source_type  => @source_type, 
+                               :bare         => @config[:bare],
+                               :compress     => @config[:compress]).to_file
     end
   end
 
-  def stdout_compile_msg(module_name)
-    puts Colors.green("Detected Module: #{module_name}")
-  end
-
-  def stdout_compile_complete_msg(module_name, output)
-    puts Colors.green("Compiled #{module_name} to #{output}")
+  def create_output_directory
+    FileUtils.mkdir_p @config[:output]
   end
 
   def compress_code(source_file)
-    JsCompiler.new(source_file).compile
+    JsCompressor.new(source_file).compile
   end
 end
 

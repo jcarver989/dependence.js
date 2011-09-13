@@ -1,7 +1,7 @@
 class FileWatcher
   @@defaults = {
     :load_path => ".",
-    :glob_str  => "**/*.js"
+    :glob_str  => "**/*"
   }
   def initialize(opts, &block)
     @options = @@defaults.merge(opts)
