@@ -15,4 +15,6 @@ Gem::Specification.new do |spec|
   spec.add_dependency("rb-inotify")
   spec.add_dependency("coffee-script")
   spec.add_dependency("therubyracer")
+
+  spec.add_development_dependency('rspec')
 end

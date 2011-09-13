@@ -1,3 +1,5 @@
+require 'coffee-script'
+
 module Dependence
   class Compiler
     class << self
@@ -35,11 +37,12 @@ module Dependence
       @@extensions
     end
 
-    def compile(source_string, options = {})
+    def compile(source_string, options = {:bare => true})
       CoffeeScript.compile(source_string, options)
     end
   end
-class JavaScriptCompiler < Compiler
+
+  class JavaScriptCompiler < Compiler
     @@extensions = [:js]
 
     def self.extensions
