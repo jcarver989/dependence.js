@@ -17,16 +17,6 @@ module Dependence
       @concat = Concatenator.new(@file_list)
     end
 
-    def build
-      stdout_compile_msg(@name)
-      output = @concat.concat_files do |file_path, file_contents|
-        extension = File.extname(file_path) 
-        compile(extension, file_contents)
-      end
-
-      output = ModuleInjector.modularize(@name, output) unless @config[:bare] == true
-      output
-    end
 
     def to_file
       File.open(@output_file, 'w') do |f|
@@ -38,6 +28,17 @@ module Dependence
     end
 
     private
+
+    def build
+      stdout_compile_msg(@name)
+      output = @concat.concat_files do |file_path, file_contents|
+        extension = File.extname(file_path) 
+        compile(extension, file_contents)
+      end
+
+      output = ModuleInjector.modularize(@name, output) unless @config[:bare] == true
+      output
+    end
 
     def compile(extension, source)
       Compiler.get_compiler_for(extension).new.compile(source)
