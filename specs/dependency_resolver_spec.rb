@@ -1,4 +1,4 @@
-require 'dependence/dependency_resolver'
+require 'dependence'
 require 'tmpdir'
 require  File.join(File.dirname(__FILE__), 'spec_helper')
 
