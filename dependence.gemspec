@@ -1,6 +1,6 @@
 Gem::Specification.new do |spec|
   spec.name ="dependence"
-  spec.version = "0.0.96"
+  spec.version = "0.0.97"
   spec.summary = "An easy way to handle your client side javascript dependencies"
   spec.authors = ["Joshua Carver"]
   spec.email = "jcarver989@gmail.com"
