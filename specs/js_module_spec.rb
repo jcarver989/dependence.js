@@ -36,7 +36,7 @@ describe JsModule do
         write_module(path, true, true)
         module_file = File.join(path, File.basename(path))
         output = File.read("#{module_file}.min.js")
-        output.should == "function b(){alert(\"something\")};\n"
+        output.should == "(function(){function b(){alert(\"something\")};})();\n"
       end
     end
   end

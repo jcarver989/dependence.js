@@ -23,7 +23,7 @@ class JsCompressor
 
   def cmd_prefix
     path = File.join(File.dirname(__FILE__), "../", "../", "compiler", "compiler.jar")
-    "java -jar #{path}"
+    "java -jar #{path} --output_wrapper '(function(){%output%})();'"
     # --create_source_map js_map
   end
 end

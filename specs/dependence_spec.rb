@@ -23,5 +23,4 @@ describe "Dependence" do
   it "should have module by default" do
     test_dependence("", ModuleInjector.modularize("module", "#{FILE_C}#{FILE_A}#{FILE_B}"))
   end
-
 end

@@ -8,7 +8,7 @@ describe JsCompressor do
         file = files[1] # FILE_B from spec_helper
         JsCompressor.new(file).compress
         compressed_file = File.read(file.gsub(".js", ".min.js"))
-        compressed_file.should == "function b(){alert(\"something\")};\n"
+        compressed_file.should == "(function(){function b(){alert(\"something\")};})();\n"
       end
     end
   end
