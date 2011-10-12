@@ -26,7 +26,7 @@ class DependenceCompiler
   private
 
   def compile_with_watcher
-    FileWatcher.new(:load_path => @load_path,  :glob_str => @source_type) do
+    Dependence::FileWatcher.new(:load_path => @load_path,  :glob_str => @source_type) do
       print "File change detected. Recompiling... "
       begin
         run_compile
